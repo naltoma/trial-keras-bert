@@ -1,0 +1,6 @@
+*~
+.DS_Store
+Pipfile.lock
+run_test.py
+logs/*
+.vscode
