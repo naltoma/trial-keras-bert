@@ -2,7 +2,6 @@
 import sys
 sys.path.append('modules')
 from keras_bert import load_trained_model_from_checkpoint
-from transformers import BertModel
 
 import os
 pretrained_path = os.path.expanduser('~/model/bert-wiki-ja/')
@@ -13,7 +12,9 @@ sentencepiece_path = os.path.join(pretrained_path, 'wiki-ja.model')
 dataset_path = os.path.expanduser('~/data/livedoor-text/')
 #dataset_path = os.path.expanduser('~/data/small/')
 
-EPOCHS=10
+model_path = os.path.join(pretrained_path, 'model_livedoor.h5')
+
+EPOCHS=100
 BATCH_SIZE=16
 
 bert = load_trained_model_from_checkpoint(config_path, checkpoint_path, training=False, trainable=False)
@@ -113,21 +114,50 @@ print("len(x_train), len(y_train): ", len(x_train), len(y_train))
 # ready model for classification
 from keras.layers import Dense, LSTM, Bidirectional
 from keras import Input, Model
+from keras.callbacks import EarlyStopping, ModelCheckpoint, TensorBoard
 input_layer = Input(x_train[0].shape)
 x1 = Bidirectional(LSTM(356))(input_layer)
 output_layer = Dense(len(label2id), activation='softmax')(x1)
 
 model = Model(input_layer, output_layer)
 model.compile(loss='categorical_crossentropy', optimizer='nadam', metrics=['mae', 'mse', 'acc'])
-
+model.summary()
 
 # fine-tune for classification
 start = time.time()
 print("model.fit(): begin")
-model.fit(x_train, y_train, epochs=EPOCHS, batch_size=BATCH_SIZE)
+history = model.fit(x_train, y_train, epochs=EPOCHS, batch_size=BATCH_SIZE,
+    callbacks = [
+              EarlyStopping(patience=5, monitor='val_acc', mode='max'),
+              ModelCheckpoint(filepath=model_path, monitor='val_acc', verbose=1, save_best_only=True, save_weights_only=False, mode='max', period=1)
+          ],
+          validation_split=0.2, shuffle=True
+    )
 print("model.fit(): time = ", round(time.time() - start, 2), "sec")
-model_path = os.path.join(pretrained_path, 'model_livedoor.h5')
-model.save(model_path)
+#model.save(model_path)
+
+# visualize history
+import matplotlib.pyplot as plt
+#from keras.utils import plot_model
+#plot_model(model, to_file='model.png')
+# Plot training & validation accuracy values
+plt.plot(history.history['acc'])
+plt.plot(history.history['val_acc'])
+plt.title('Model accuracy')
+plt.ylabel('Accuracy')
+plt.xlabel('Epoch')
+plt.legend(['Train', 'Val'], loc='upper left')
+plt.savefig('logs/training-validation-accuracy.png')
+plt.close()
+
+# Plot training & validation loss values
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('Model loss')
+plt.ylabel('Loss')
+plt.xlabel('Epoch')
+plt.legend(['Train', 'Val'], loc='upper left')
+plt.savefig('logs/training-validation-loss.png')
 
 # predict
 start = time.time()
@@ -137,7 +167,7 @@ print("model.predict(): time = ", round(time.time() - start, 2), "sec")
 
 # accuracy
 test_labels = y_test.argmax(axis=1)
-print("ACC: ", np.sum(test_labels == predicts) / len(y_test))
+print("ACC(test): ", np.sum(test_labels == predicts) / len(y_test))
 
 # report
 from sklearn.metrics import classification_report, confusion_matrix
