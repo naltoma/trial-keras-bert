@@ -1,9 +1,9 @@
-## summary
-
-<hr>
-
 ## whatis
 新システムとしてTesla V100SでSingularityでSlurmな環境が導入されたので、[BERT with SentencePiece を日本語 Wikipedia で学習してモデルを公開しました](https://yoheikikuta.github.io/bert-japanese/)を使って[livedoor ニュースコーパス](https://www.rondhuit.com/download.html)のジャンル推定するfine-tuningしてみた。
+
+ベクトル生成、fine-tuning, 全体処理の3パートで時間計測しCPU・GPUで比較したところ、ベクトル生成で約18.7倍高速、fine-tuningで約55.1倍高速、全体で約27.5倍高速という結果に。
+
+- [う・ん・ち・く♡](./footnotes.md)
 
 ## requirements
 - Singularity
@@ -126,11 +126,11 @@ Wed Dec  2 19:58:57 2020
 - GPU1個使った場合の例。
     - [logs/sample.txt](./logs/sample.txt)
     - ベクトル生成に741秒。約10文書/1秒。
-        - CPUと比べて約18.7倍高速。
+        - **CPUと比べて約18.7倍高速。**
     - fine-tuningに266秒。約26秒/1エポック。
-        - CPUと比べて約55.1倍高速。ヒャッハー！モデルサイズ、エポック数、バッチサイズとの兼ね合いでも変わってきそう。
+        - **CPUと比べて約55.1倍高速。ヒャッハー！**モデルサイズ、エポック数、バッチサイズとの兼ね合いでも変わってきそう。
     - 全体の処理時間は17分20秒。
-        - CPUと比べて約27.5倍高速。
+        - **CPUと比べて約27.5倍高速。**
 - GPU2個（2ノード）
     - ベクトル生成に758秒。
     - fine-tuningに274秒。
@@ -153,6 +153,7 @@ Wed Dec  2 19:58:57 2020
 ## change logs
 - 2020/12/2, 1st commit
 - 2020/12/3, add early stopping, visualize history
+- 2002/12/18, add augumentation example: [train-aug.py](./train-aug.py), [README-aug.md](./README-aug.md)
 
 ## referencese
 - [keras-bert](https://github.com/CyberZHG/keras-bert)
