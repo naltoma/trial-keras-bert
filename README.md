@@ -3,7 +3,9 @@
 
 ベクトル生成、fine-tuning, 全体処理の3パートで時間計測しCPU・GPUで比較したところ、ベクトル生成で約18.7倍高速、fine-tuningで約55.1倍高速、全体で約27.5倍高速という結果に。
 
-- [う・ん・ち・く♡](./footnotes.md)
+- 補足
+    - [チュートリアル](./tutorial.md)
+    - [う・ん・ち・く♡](./footnotes.md)
 
 ## requirements
 - Singularity

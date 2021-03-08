@@ -1,0 +1,37 @@
+amane:tnal% singularity shell --nv tensorflow_latest-gpu-py3.sif
+bash: warning: setlocale: LC_ALL: cannot change locale (ja_JP.UTF-8)
+Singularity> python
+Python 3.6.9 (default, Nov  7 2019, 10:44:02) 
+[GCC 8.3.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import tensorflow as tf
+2021-03-05 22:15:15.324078: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libnvinfer.so.6
+2021-03-05 22:15:15.397152: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libnvinfer_plugin.so.6
+>>> print(tf.test.is_gpu_available)
+<function is_gpu_available at 0x7f63921e6c80>
+>>> print(tf.test.gpu_device_name())
+2021-03-05 22:15:18.968249: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+2021-03-05 22:15:19.012248: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2100000000 Hz
+2021-03-05 22:15:19.019903: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x4a2e7a0 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+2021-03-05 22:15:19.019989: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+2021-03-05 22:15:19.027713: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcuda.so.1
+2021-03-05 22:15:19.172265: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x4a30df0 initialized for platform CUDA (this does not guarantee that XLA will be used). Devices:
+2021-03-05 22:15:19.172328: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Tesla V100S-PCIE-32GB, Compute Capability 7.0
+2021-03-05 22:15:19.176986: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1555] Found device 0 with properties: 
+pciBusID: 0000:3b:00.0 name: Tesla V100S-PCIE-32GB computeCapability: 7.0
+coreClock: 1.597GHz coreCount: 80 deviceMemorySize: 31.75GiB deviceMemoryBandwidth: 1.03TiB/s
+2021-03-05 22:15:19.177074: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.1
+2021-03-05 22:15:19.177149: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10
+2021-03-05 22:15:19.255359: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcufft.so.10
+2021-03-05 22:15:19.338260: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcurand.so.10
+2021-03-05 22:15:19.669417: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10
+2021-03-05 22:15:19.837464: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusparse.so.10
+2021-03-05 22:15:19.837560: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2021-03-05 22:15:19.840822: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1697] Adding visible gpu devices: 0
+2021-03-05 22:15:19.842832: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.1
+2021-03-05 22:15:23.075332: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1096] Device interconnect StreamExecutor with strength 1 edge matrix:
+2021-03-05 22:15:23.075440: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1102]      0 
+2021-03-05 22:15:23.075457: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] 0:   N 
+2021-03-05 22:15:23.084119: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1241] Created TensorFlow device (/device:GPU:0 with 30517 MB memory) -> physical GPU (device: 0, name: Tesla V100S-PCIE-32GB, pci bus id: 0000:3b:00.0, compute capability: 7.0)
+/device:GPU:0
+>>> 

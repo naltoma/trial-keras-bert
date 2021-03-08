@@ -1,0 +1,17 @@
+# small dataset
+## CPU at MacBook Pro 2019, 2.6GHz 6Core Intel Core i7, 16GB
+2021年 3月 5日 金曜日 14時25分42秒 JST
+2021年 3月 5日 金曜日 14時28分49秒 JST
+
+---
+# whole dataset
+## CPU at amane: about 8 hours
+Fri Mar  5 22:53:45 JST 2021
+Sat Mar  6 06:52:55 JST 2021
+
+## GPU at amane: about 40 min
+Fri Mar  5 22:53:53 JST 2021
+Fri Mar  5 23:34:39 JST 2021
+
+## CPU at MacBook 2020, Apple M1, 16GB
+illegal hardware instruction  python train.py
