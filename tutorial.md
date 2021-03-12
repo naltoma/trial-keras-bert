@@ -72,6 +72,12 @@ squeue
 # 下記の xxx は step 9 で確認した JOBID を指定しよう。
 # 確認済んだら Ctrl-c でtailコマンドを終了。
 tail -f keras-bert-normal-xxx.log
+
+# step 11: 後片付け
+cd ..
+rm -rf trial-keras-bert
+rm ~/model
+rm ~/data
 ```
 
 ---
@@ -81,7 +87,7 @@ tail -f keras-bert-normal-xxx.log
     - そのプログラムに必要な環境をコンテナとして用意する。（上記step 4）
     - 用意したコンテナを直接動かすのではなく、Slurm経由で動かす。（上記step 8）
 - 今回のハンズオン主題は **(a) どうやってコンテナを用意するのか**、**(b) どうやってSlurmで動かすのか** の2点。
-- Singularity, Slurmの概説は[footnote.md](footnote.md)参照。
+- Singularity, Slurmの概説は[footnotes.md](footnotes.md)参照。
 
 ---
 ## Tips
@@ -105,14 +111,18 @@ tail -f keras-bert-normal-xxx.log
 - step a-4: defファイルを作成する。
     - コンテナ作成方法はいくつか種類がある。sandboxを作って手動で作業したいなら[README.md](README.md)を参照しよう。今回は定義ファイル（defファイル）を作成して、それを使ってコンテナを作成することに。
     - [keras-bert.def](keras-bert.def)
-        - 1行目: ``BootStrap``
+        - 1行目: ``BootStrap: localimage``
             - 今回は pull で用意したコンテナイメージをベースに作成するため、``localimage`` と指定。もしdockerhubからダウンロードしたい場合には ``docker`` と書く。
-        - 2行目: ``From``
+        - 2行目: ``From: tensorflow_latest-gpu-py3.sif``
             - 今回は localimage なので、具体的なファイル名 ``tensorflow_latest-gpu-py3.sif`` を指定している。
             - dockerhubのtensorflowからダウンロードしたい場合には ``tensorflow/tensorflow:latest-gpu`` のように書く。書き方は dockerhub の pull で指定する記述と一緒。
         - 5行目: ``%post``
             - コンテナイメージを用意した後で何か追加処理をする場合に使う。
             - 今回は apt を最新に更新し、graphvizをインストール。その後で pip で関連パッケージをインストール。
+              - ``apt-get update``
+              - ``apt install -y --no-install-recommends graphviz``
+              - ``pip install --upgrade pip``
+              - ``pip install keras==2.3 keras-bert sentencepiece scikit-learn transformers matplotlib pydot``
             - これだけで良いのだけど、今回は ``keras==2.3`` として keras だけバージョンを指定している。バージョンを指定しないと自動で最新が選ばれてしまい、それが要求する tensorflow==2.4.1が自動でインストールされてしまう。
                 - これは大きな問題であることに注意。GPU対応版として用意されていたのは ``tensorflow-gpu==2.1.0`` なのに、それとは別に tensorflow==2.4.1 がインストールされてしまう。そして keras はGPU非対応のtensorflowを参照してしまう。
                 - この結果、見かけ上GPUに対応したパッケージも入っているが、実際にはそれを使わないという残念なコンテナを作ってしまう。残念なコンテナでプログラムを実行すると、nvida-smi で確認してもGPU上では動作していないことを確認できる。また、以下のようにして ``tf.test.gpu_device_name()`` の出力結果からも判断できる。
